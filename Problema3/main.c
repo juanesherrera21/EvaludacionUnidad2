@@ -5,17 +5,11 @@
 #include <string.h>
 #include <ctype.h>
 #include <termios.h>
-#include "tlpi_hdr.h"
 #define BUF_SIZE 100
 
 int main(int argc, char *argv[]){
     // Apagar el ECHO
-    if (tcgetattr(STDIN_FILENO, &tp) == -1)
-        errExit("tcgetattr");
-    save = tp;                          /* So we can restore settings later */
-    tp.c_lflag &= ~ECHO;                /* ECHO off, other bits unchanged */
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &tp) == -1)
-        errExit("tcsetattr");
+    
     // Lectura de argumentos argv    
     for (int i = 0; i < argc; i++)
     {
@@ -33,7 +27,7 @@ int main(int argc, char *argv[]){
         status = fgets(buffer, sizeof(buffer),fin);
         if(status != NULL){
             printf("%s",buffer);
-            //sleep(1);
+            sleep(1);
         }
     }while (status !=NULL);
     printf("\n");
