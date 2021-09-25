@@ -8,34 +8,17 @@
 
 #define BUF_SIZE 100
 
+char comando[10];
+
+void upper(char *buffer);
+void words(char *buffer);
+void vowels(char *buffer);
+
+void *threadComandos(void *arg){
+    return NULL;
+}
+
 int main(int argc, char *argv[]){
-    // Apagar el ECHO
-    struct termios tp, save;
-    char buf[BUF_SIZE];
-
-    /* Retrieve current terminal settings, turn echoing off */
-
-    if (tcgetattr(STDIN_FILENO, &tp) == -1)
-        exit("tcgetattr");
-    save = tp;                          /* So we can restore settings later */
-    tp.c_lflag &= ~ECHO;                /* ECHO off, other bits unchanged */
-    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &tp) == -1)
-        exit("tcsetattr");
-
-    /* Read some input and then display it back to the user */
-
-    printf("Enter text: ");
-    fflush(stdout);
-    if (fgets(buf, BUF_SIZE, stdin) == NULL)
-        printf("Got end-of-file/error on fgets()\n");
-    else
-        printf("\nRead: %s", buf);
-
-    /* Restore original terminal settings */
-
-    if (tcsetattr(STDIN_FILENO, TCSANOW, &save) == -1)
-        exit("tcsetattr");
-
     // Lectura de argumentos argv    
     for (int i = 0; i < argc; i++)
     {
@@ -47,6 +30,12 @@ int main(int argc, char *argv[]){
         perror("open fin file fails: ");
         return(EXIT_FAILURE);
     }
+    int *op = malloc(sizeof(int));
+    *op = 2;
+    // Creacion Hilo
+    pthread_t threadsID;
+    pthread_create(&threadsID,NULL,&threadComandos, NULL);
+
     char buffer[64];
     char *status;
     do{
@@ -58,8 +47,11 @@ int main(int argc, char *argv[]){
     }while (status !=NULL);
     printf("\n");
     
-    // Comando 'upper'
-    char comando[10];
+    fclose(fin);
+    return(EXIT_SUCCESS);
+}
+
+void upper(char *buffer){
     scanf("%s",comando);
     if((strcmp(comando,"upper"))==0){
         for (int i = 0; buffer[i] != '\0'; ++i){
@@ -67,8 +59,9 @@ int main(int argc, char *argv[]){
 	    }
 	    printf("upper: %s\n", buffer);
     }
-    
-    // Comando 'words'
+}
+
+void words(char *buffer){
     int count = 0;
     char lastC;
     int len  = strlen(buffer);
@@ -81,8 +74,9 @@ int main(int argc, char *argv[]){
         }
         printf("words: %d\n",count);
     }
-    
-    // comando 'vowels'
+}
+
+void vowels(char *buffer){
     if((strcmp(comando,"vowels"))==0){
         int vowels = 0;
         for (int i = 0; buffer[i] != '\0'; i++) {
@@ -93,7 +87,5 @@ int main(int argc, char *argv[]){
         }
         printf("vowels: %d\n",vowels);
     }
-    
-    fclose(fin);
-    return(EXIT_SUCCESS);
 }
+
