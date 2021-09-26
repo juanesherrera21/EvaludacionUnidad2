@@ -8,7 +8,9 @@
 
 #define BUF_SIZE 100
 
-int op = 4;
+struct termios tp;
+char buf[BUF_SIZE];
+int op = 5; // 1. upper, 2. words, 3. vowels, 4. none. 5. -------
 char comando[10];
 
 void upper(char *buffer);
@@ -16,6 +18,10 @@ void words(char *buffer);
 void vowels(char *buffer);
 
 void *threadComandos(void *arg){
+    // ECHO off
+    tcgetattr(fileno(stdin), &tp);
+    tp.c_lflag &= ~ECHO;                /* ECHO off, other bits unchanged */
+    tcsetattr(fileno(stdin), 0, &tp);
     while (1)
     {
         scanf("%s",comando);
@@ -46,6 +52,11 @@ void *threadComandos(void *arg){
 }
 
 int main(int argc, char *argv[]){
+    // ECHO off
+    tcgetattr(fileno(stdin), &tp);
+    tp.c_lflag &= ~ECHO;                /* ECHO off, other bits unchanged */
+    tcsetattr(fileno(stdin), 0, &tp);
+
     // Lectura de argumentos argv    
     for (int i = 0; i < argc; i++)
     {
@@ -68,6 +79,7 @@ int main(int argc, char *argv[]){
         if(status != NULL){
             switch (op)
             {
+            
             case 1:
                 printf("%s",buffer);
                 upper(buffer);
@@ -95,7 +107,10 @@ int main(int argc, char *argv[]){
         }
     }while (status !=NULL);
     printf("\n");
+
     fclose(fin);
+    fflush(fin);
+    fflush(stdout);
     return(EXIT_SUCCESS);
 }
 
@@ -116,7 +131,7 @@ void words(char *buffer){
         }
         lastC = buffer[i];
     }
-    printf("%d",count);
+    printf("N# Palabras: %d",count);
     printf("\n");
 }
 
@@ -128,7 +143,7 @@ void vowels(char *buffer){
             vowels++;
         }
     }
-    printf("%d",vowels);
+    printf("N# Vocales: %d",vowels);
     printf("\n");
 }
 
