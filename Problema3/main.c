@@ -77,9 +77,7 @@ int main(int argc, char *argv[]){
     do{
         status = fgets(buffer, sizeof(buffer),fin);
         if(status != NULL){
-            switch (op)
-            {
-            
+            switch (op){
             case 1:
                 printf("%s",buffer);
                 upper(buffer);
