@@ -16,7 +16,6 @@ void words(char *buffer);
 void vowels(char *buffer);
 
 void *threadComandos(void *arg){
-    char comando[100];
     while (1)
     {
         scanf("%s",comando);
@@ -119,7 +118,6 @@ void words(char *buffer){
     }
     printf("%d",count);
     printf("\n");
-
 }
 
 void vowels(char *buffer){
@@ -132,6 +130,5 @@ void vowels(char *buffer){
     }
     printf("%d",vowels);
     printf("\n");
-
 }
 
