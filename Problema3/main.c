@@ -16,7 +16,7 @@ void words(char *buffer);
 void vowels(char *buffer);
 
 void *threadComandos(void *arg){
-    char comando[20];
+    char comando[100];
     while (1)
     {
         scanf("%s",comando);
@@ -62,8 +62,8 @@ int main(int argc, char *argv[]){
     pthread_t threadsID;
     pthread_create(&threadsID,NULL,&threadComandos, NULL);
 
-    char buffer[64];
-    char *status;
+    char buffer[100];
+    char *status = NULL;
     do{
         status = fgets(buffer, sizeof(buffer),fin);
         if(status != NULL){
@@ -96,7 +96,6 @@ int main(int argc, char *argv[]){
         }
     }while (status !=NULL);
     printf("\n");
-    
     fclose(fin);
     return(EXIT_SUCCESS);
 }
@@ -105,7 +104,7 @@ void upper(char *buffer){
     for (int i = 0; buffer[i] != '\0'; ++i){
         buffer[i] = toupper(buffer[i]);
     }
-    printf("%s\n", buffer);
+    printf("%s", buffer);
 }
 
 void words(char *buffer){
@@ -118,7 +117,9 @@ void words(char *buffer){
         }
         lastC = buffer[i];
     }
-    printf("%d\n",count);
+    printf("%d",count);
+    printf("\n");
+
 }
 
 void vowels(char *buffer){
@@ -129,6 +130,8 @@ void vowels(char *buffer){
             vowels++;
         }
     }
-    printf("%d\n",vowels);
+    printf("%d",vowels);
+    printf("\n");
+
 }
 
